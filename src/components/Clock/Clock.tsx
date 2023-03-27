@@ -1,62 +1,25 @@
 import { format } from "date-fns";
-import { utcToZonedTime, zonedTimeToUtc } from "date-fns-tz";
-import { FC, useEffect, useState } from "react";
+import { utcToZonedTime } from "date-fns-tz";
+import { FC, useState } from "react";
+import {
+    ANGLES,
+    CLOCK_CONTAINER_WIDTH,
+    CLOCK_RADIUS,
+    HOUR_HAND_LENGTH,
+    MINUTE_HAND_LENGTH,
+    SECOND_HAND_LENGTH,
+    SECOND_OPPOSITE_HAND_LENGTH,
+    STARTING_POINT,
+} from "./Clock.constants";
 import {
     BlackContainer,
     ClockContainer,
     Number,
+    SVGContainer,
+    Title,
     WhiteContainer,
 } from "./Clock.styled";
-
-const ANGLES = [...Array(12).keys()].map((el) => el * 30);
-
-const CLOCK_CONTAINER_WIDTH = 270;
-const PADDING_FOR_WHITE_CONTAINER = 40;
-const STARTING_POINT = PADDING_FOR_WHITE_CONTAINER / 2;
-const CLOCK_RADIUS = 0.5 * (CLOCK_CONTAINER_WIDTH - PADDING_FOR_WHITE_CONTAINER);
-
-const HOUR_HAND_LENGTH = 70;
-const MINUTE_HAND_LENGTH = CLOCK_RADIUS + 10;
-const SECOND_HAND_LENGTH = 125;
-const SECOND_OPPOSITE_HAND_LENGTH = 30;
-
-function getLeftAndTopDifference(
-    angle: number,
-    radiusValue: number = CLOCK_RADIUS
-): {
-    topDifference: number;
-    leftDifference: number;
-} {
-    if (angle === 180) {
-        return {
-            topDifference: radiusValue * 2,
-            leftDifference: 0,
-        };
-    }
-    const angle_in_radians = (angle * Math.PI) / 180;
-    const lower_angle = (180 - angle) / 2;
-
-    const other_angle_in_radians = (lower_angle * Math.PI) / 180;
-    const arcStraightLineWidth =
-        (radiusValue * Math.sin(angle_in_radians)) /
-        Math.sin(other_angle_in_radians);
-
-    const left_angle = 90 - lower_angle;
-    const left_angle_in_radians = (left_angle * Math.PI) / 180;
-    const left_angle_sin = Math.sin(left_angle_in_radians);
-
-    const right_angle = 90 - left_angle;
-    const right_angle_in_radians = (right_angle * Math.PI) / 180;
-    const right_angle_sin = Math.sin(right_angle_in_radians);
-
-    const leftDifference = right_angle_sin * arcStraightLineWidth;
-    const topDifference = left_angle_sin * arcStraightLineWidth;
-
-    return {
-        leftDifference,
-        topDifference,
-    };
-}
+import { getLeftAndTopDifference } from "./Clock.utils";
 
 const getDateAtTimeZone = (date: Date, timeZone: string) =>
     utcToZonedTime(date, timeZone);
@@ -108,102 +71,33 @@ export const Clock: FC<{ timeZone: string }> = ({ timeZone }) => {
                             {index || 12}
                         </Number>
                     ))}
-                    <svg
+                    <SVGContainer
                         height={CLOCK_CONTAINER_WIDTH}
                         width={CLOCK_CONTAINER_WIDTH}
-                        style={{ position: "inherit" }}
                     >
-                        <line
-                            x1={CLOCK_CONTAINER_WIDTH / 2}
-                            y1={CLOCK_CONTAINER_WIDTH / 2}
-                            x2={
-                                CLOCK_CONTAINER_WIDTH / 2 +
-                                getLeftAndTopDifference(
-                                    minutesAngle,
-                                    MINUTE_HAND_LENGTH
-                                ).leftDifference
-                            }
-                            y2={
-                                CLOCK_CONTAINER_WIDTH / 2 -
-                                MINUTE_HAND_LENGTH +
-                                getLeftAndTopDifference(
-                                    minutesAngle,
-                                    MINUTE_HAND_LENGTH
-                                ).topDifference
-                            }
-                            strokeLinecap="round"
-                            style={{
-                                stroke: "black",
-                                strokeWidth: 5,
-                            }}
+                        <Hand
+                            angle={hoursAngle}
+                            handLength={HOUR_HAND_LENGTH}
+                            strokeColor="black"
+                            strokeWidth="5"
                         />
-                        <line
-                            x1={CLOCK_CONTAINER_WIDTH / 2}
-                            y1={CLOCK_CONTAINER_WIDTH / 2}
-                            x2={
-                                CLOCK_CONTAINER_WIDTH / 2 +
-                                getLeftAndTopDifference(hoursAngle, HOUR_HAND_LENGTH)
-                                    .leftDifference
-                            }
-                            y2={
-                                CLOCK_CONTAINER_WIDTH / 2 -
-                                HOUR_HAND_LENGTH +
-                                getLeftAndTopDifference(hoursAngle, HOUR_HAND_LENGTH)
-                                    .topDifference
-                            }
-                            strokeLinecap="round"
-                            style={{
-                                stroke: "black",
-                                strokeWidth: 5,
-                            }}
+                        <Hand
+                            angle={minutesAngle}
+                            handLength={MINUTE_HAND_LENGTH}
+                            strokeColor="black"
+                            strokeWidth="5"
                         />
-                        <line
-                            x1={CLOCK_CONTAINER_WIDTH / 2}
-                            y1={CLOCK_CONTAINER_WIDTH / 2}
-                            x2={
-                                CLOCK_CONTAINER_WIDTH / 2 +
-                                getLeftAndTopDifference(
-                                    secondsAngle,
-                                    SECOND_HAND_LENGTH
-                                ).leftDifference
-                            }
-                            y2={
-                                CLOCK_CONTAINER_WIDTH / 2 -
-                                SECOND_HAND_LENGTH +
-                                getLeftAndTopDifference(
-                                    secondsAngle,
-                                    SECOND_HAND_LENGTH
-                                ).topDifference
-                            }
-                            strokeLinecap="round"
-                            style={{
-                                stroke: "#FF9500",
-                                strokeWidth: 4,
-                            }}
+                        <Hand
+                            angle={secondsAngle}
+                            handLength={SECOND_HAND_LENGTH}
+                            strokeColor="#FF9500"
+                            strokeWidth="4"
                         />
-                        <line
-                            x1={CLOCK_CONTAINER_WIDTH / 2}
-                            y1={CLOCK_CONTAINER_WIDTH / 2}
-                            x2={
-                                CLOCK_CONTAINER_WIDTH / 2 +
-                                getLeftAndTopDifference(
-                                    secondsAngle + 180,
-                                    SECOND_OPPOSITE_HAND_LENGTH
-                                ).leftDifference
-                            }
-                            y2={
-                                CLOCK_CONTAINER_WIDTH / 2 -
-                                SECOND_OPPOSITE_HAND_LENGTH +
-                                getLeftAndTopDifference(
-                                    secondsAngle + 180,
-                                    SECOND_OPPOSITE_HAND_LENGTH
-                                ).topDifference
-                            }
-                            strokeLinecap="round"
-                            style={{
-                                stroke: "#FF9500",
-                                strokeWidth: 4,
-                            }}
+                        <Hand
+                            angle={secondsAngle + 180}
+                            handLength={SECOND_OPPOSITE_HAND_LENGTH}
+                            strokeColor="#FF9500"
+                            strokeWidth="4"
                         />
                         <circle
                             cx={CLOCK_CONTAINER_WIDTH / 2}
@@ -213,13 +107,14 @@ export const Clock: FC<{ timeZone: string }> = ({ timeZone }) => {
                             stroke="black"
                             strokeWidth="3"
                         />
-                    </svg>
+                    </SVGContainer>
                 </WhiteContainer>
             </BlackContainer>
-            <p style={{ marginBottom: 0 }}>{timeZone}</p>
-            <p style={{ marginTop: 0 }}>
+            {/* <p style={{ marginBottom: 0 }}>{timeZone}</p> */}
+            <Title disableMarginBottom>{timeZone}</Title>
+            <Title disableMarginTop>
                 {format(currentDate, "d LLL, KK:mm:ss aa")}
-            </p>
+            </Title>
         </ClockContainer>
     );
 };
