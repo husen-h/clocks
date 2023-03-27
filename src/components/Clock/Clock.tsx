@@ -1,6 +1,6 @@
 import { format } from "date-fns";
 import { utcToZonedTime } from "date-fns-tz";
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import {
     ANGLES,
     CLOCK_CONTAINER_WIDTH,
@@ -29,18 +29,18 @@ export const Clock: FC<{ timeZone: string }> = ({ timeZone }) => {
         getDateAtTimeZone(new Date(), timeZone)
     );
 
-    // useEffect(() => {
-    //     function loop(timeout: number) {
-    //         setCurrentDate(getDateAtTimeZone(new Date(), timeZone));
-    //         window.requestAnimationFrame(loop);
-    //     }
+    useEffect(() => {
+        function loop(timeout: number) {
+            setCurrentDate(getDateAtTimeZone(new Date(), timeZone));
+            window.requestAnimationFrame(loop);
+        }
 
-    //     const id = window.requestAnimationFrame(loop);
+        const id = window.requestAnimationFrame(loop);
 
-    //     return () => {
-    //         window.cancelAnimationFrame(id);
-    //     };
-    // }, []);
+        return () => {
+            window.cancelAnimationFrame(id);
+        };
+    }, []);
 
     const hours = currentDate.getHours();
     const minutes = currentDate.getMinutes();
@@ -110,7 +110,6 @@ export const Clock: FC<{ timeZone: string }> = ({ timeZone }) => {
                     </SVGContainer>
                 </WhiteContainer>
             </BlackContainer>
-            {/* <p style={{ marginBottom: 0 }}>{timeZone}</p> */}
             <Title disableMarginBottom>{timeZone}</Title>
             <Title disableMarginTop>
                 {format(currentDate, "d LLL, KK:mm:ss aa")}
