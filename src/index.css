@@ -1,0 +1,40 @@
+@font-face {
+    font-family: "Kanit";
+    src: url("./assets/Kanit-Regular.ttf");
+}
+
+html {
+    font-family: "Kanit", sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+button {
+    border: none;
+    margin: 0px;
+    padding: 0px;
+    padding: 0.75rem;
+    background: rgba(224, 229, 224, 0.561);
+    border-radius: 12px;
+
+    font-size: 1.2rem;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #e0e5e0e0;
+}
+
+input {
+    padding: 6px 8px;
+    font-size: 1.25rem;
+    border-radius: 8px;
+    border: 1px solid grey;
+}
