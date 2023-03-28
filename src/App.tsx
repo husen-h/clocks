@@ -15,20 +15,29 @@ function App() {
     };
 
     return (
-        <>
+        <AppContainer>
             <h1>World Time</h1>
-            <button onClick={onButtonClick}>Select timezones</button>
+            <div>
+                <button onClick={onButtonClick}>Select timezones</button>
+            </div>
             <ClocksContainer>
                 {timeZones.map((timeZone) => (
                     <Clock key={timeZone} timeZone={timeZone} />
                 ))}
-                {/* <Clock timeZone="America/New_York" /> */}
-                {/* <Clock timeZone="Africa/Ceuta" />
-                <Clock timeZone="America/Sao_Paulo" /> */}
             </ClocksContainer>
-        </>
+        </AppContainer>
     );
 }
+
+const AppContainer = styled.section`
+    display: flex;
+    flex-direction: column;
+
+    height: 100vh;
+    
+
+    overflow: hidden;
+`;
 
 const ClocksContainer = styled.section`
     display: grid;
@@ -36,6 +45,8 @@ const ClocksContainer = styled.section`
     gap: 20px;
 
     padding: 60px;
+
+    overflow-y: auto;
 `;
 
 export default App;
