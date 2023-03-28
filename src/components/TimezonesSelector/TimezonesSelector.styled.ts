@@ -19,11 +19,11 @@ export const Header = styled.section`
     justify-content: flex-end;
 
     height: 48px;
+
+    margin: 12px;
 `;
 
-export const Footer = styled(Header)`
-    margin-top: 16px;
-`;
+export const Footer = styled(Header)``;
 
 export const Content = styled.section`
     flex-grow: 1;
@@ -50,6 +50,8 @@ export const ContentHalfTitle = styled.h3`
 export const ListContainer = styled.div`
     overflow-y: auto;
     flex: 1 0 0px;
+
+    margin-top: 6px;
 `;
 
 export const ListElement = styled.div`
