@@ -3,7 +3,7 @@ import { FC, useMemo, useState } from "react";
 import { HiOutlineChevronLeft, HiOutlineChevronRight } from "react-icons/hi";
 import { IoMdClose } from "react-icons/io";
 import { useQuery } from "react-query";
-import { fetchTimeZons } from "../../api/fetchRequests";
+import { fetchTimeZones } from "../../api/fetchRequests";
 import { useDebouncedSearch } from "../../hooks.ts/useDebouncedSearch";
 import { Modal } from "../Modal";
 import {
@@ -26,9 +26,10 @@ interface TimezonesSelectorProps {
 export const TimezonesSelector = NiceModal.create<TimezonesSelectorProps>(
     ({ onApply, savedTimeZones }) => {
         const modal = useModal();
-        const { isLoading, data } = useQuery<string[]>("timezones", fetchTimeZons);
+        const { isLoading, data } = useQuery<string[]>("timezones", fetchTimeZones);
 
-        const [addedTimeZones, setAddedTimeZones] = useState<string[]>(savedTimeZones);
+        const [addedTimeZones, setAddedTimeZones] =
+            useState<string[]>(savedTimeZones);
         const addedTimeZonesSet = new Set(addedTimeZones);
 
         const addTimeZone = (timeZone: string) => {
@@ -98,7 +99,10 @@ const ContentHalf: FC<ContentHalfProps> = ({
     const { searchValue, onChange, debouncedSearchValue } = useDebouncedSearch();
 
     const searchedData = useMemo(
-        () => data.filter((el) => el.toLowerCase().includes(debouncedSearchValue.toLowerCase())),
+        () =>
+            data.filter((el) =>
+                el.toLowerCase().includes(debouncedSearchValue.toLowerCase())
+            ),
         [debouncedSearchValue, data]
     );
 
@@ -110,9 +114,14 @@ const ContentHalf: FC<ContentHalfProps> = ({
             <ListContainer>
                 {searchedData.map((timeZone) =>
                     dataToExclude?.has(timeZone) ? null : (
-                        <ListElement key={timeZone} onClick={() => onTimeZoneClick(timeZone)}>
+                        <ListElement
+                            key={timeZone}
+                            onClick={() => onTimeZoneClick(timeZone)}
+                        >
                             {side === "right" && <HiOutlineChevronLeft size={24} />}
-                            <ListElementText title={timeZone}>{timeZone}</ListElementText>
+                            <ListElementText title={timeZone}>
+                                {timeZone}
+                            </ListElementText>
                             {side === "left" && <HiOutlineChevronRight size={24} />}
                         </ListElement>
                     )
