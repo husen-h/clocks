@@ -13,24 +13,23 @@ export function getLeftAndTopDifference(
             leftDifference: 0,
         };
     }
-    const angle_in_radians = (angle * Math.PI) / 180;
-    const lower_angle = (180 - angle) / 2;
+    const angleInRadians = (angle * Math.PI) / 180;
+    const lowerAngle = (180 - angle) / 2;
 
-    const other_angle_in_radians = (lower_angle * Math.PI) / 180;
+    const otherAngleInRadians = (lowerAngle * Math.PI) / 180;
     const arcStraightLineWidth =
-        (radiusValue * Math.sin(angle_in_radians)) /
-        Math.sin(other_angle_in_radians);
+        (radiusValue * Math.sin(angleInRadians)) / Math.sin(otherAngleInRadians);
 
-    const left_angle = 90 - lower_angle;
-    const left_angle_in_radians = (left_angle * Math.PI) / 180;
-    const left_angle_sin = Math.sin(left_angle_in_radians);
+    const leftAngle = 90 - lowerAngle;
+    const leftAngleInRadians = (leftAngle * Math.PI) / 180;
+    const leftAngleSin = Math.sin(leftAngleInRadians);
 
-    const right_angle = 90 - left_angle;
-    const right_angle_in_radians = (right_angle * Math.PI) / 180;
-    const right_angle_sin = Math.sin(right_angle_in_radians);
+    const rightAngle = 90 - leftAngle;
+    const rightAngleInRadians = (rightAngle * Math.PI) / 180;
+    const rightAngleSin = Math.sin(rightAngleInRadians);
 
-    const leftDifference = right_angle_sin * arcStraightLineWidth;
-    const topDifference = left_angle_sin * arcStraightLineWidth;
+    const leftDifference = rightAngleSin * arcStraightLineWidth;
+    const topDifference = leftAngleSin * arcStraightLineWidth;
 
     return {
         leftDifference,
